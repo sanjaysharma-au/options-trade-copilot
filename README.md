@@ -1,6 +1,11 @@
-# TimescaleDB Options Data Storage
+# Options Trade Copilot
 
-A complete setup for storing and analyzing options data from Massive.com using TimescaleDB, optimized for massive datasets.
+An options analytics dashboard that ingests options data from Massive.com into TimescaleDB and uses Gemini to recommend strategies.
+
+## ✦ AI Strategy Recommendations (Gemini)
+
+`dashboard.py` (run it, then open http://localhost:8050) has an **Ask Gemini** button. It sends the selected ticker and expiry's option chain, with Greeks, IV, volume and open interest from TimescaleDB, to Gemini 2.5 Flash and shows the strategy it recommends.
+Set `GEMINI_API_KEY` in `.env` to enable it (see `.env.template`).
 
 ## 🚀 Why TimescaleDB?
 
@@ -22,11 +27,6 @@ A complete setup for storing and analyzing options data from Massive.com using T
 ├── dashboard.py               # Plotly Dash UI with Gemini strategy recommendations
 └── requirements.txt           # Python dependencies
 ```
-
-## ✦ AI Strategy Recommendations (Gemini)
-
-`dashboard.py` (run it, then open http://localhost:8050) has an **Ask Gemini** button. It sends the selected ticker and expiry's option chain, with Greeks, IV, volume and open interest from TimescaleDB, to Gemini 2.5 Flash and shows the strategy it recommends.
-Set `GEMINI_API_KEY` in `.env` to enable it (see `.env.template`).
 
 ## ⚡ Quick Start (5 minutes)
 
@@ -176,18 +176,6 @@ SELECT * FROM daily_iv WHERE day > NOW() - INTERVAL '30 days';
 4. **Compression**: Data older than 7 days is auto-compressed
 5. **Continuous Aggregates**: Pre-compute daily/weekly summaries for instant queries
 
-## 📈 Typical Data Volumes
-
-For reference, here's storage with TimescaleDB compression:
-
-| Scenario | Records | Storage | Compression Ratio |
-|----------|---------|---------|-------------------|
-| 1 year, 5 symbols, minute data | ~2.5M | ~500MB | 200:1 |
-| 2 years, 100 symbols, hourly | ~1.7M | ~200MB | 250:1 |
-| 5 years, 500 symbols, 4-hour | ~2.6M | ~150MB | 300:1 |
-
-Your exact numbers depend on Greeks, bid/ask precision, and retention policies.
-
 ## 🤖 Next Steps
 
 1. **Automation**: Set up Windows Task Scheduler to run `polygon_ingestion.py` hourly
@@ -202,23 +190,6 @@ Your exact numbers depend on Greeks, bid/ask precision, and retention policies.
 - [Massive.com Options API](https://massive.com/docs/rest/options/overview)
 - [PostgreSQL Hypertables](https://docs.timescale.com/use-timescale/latest/hypertables/)
 - [TimescaleDB Compression](https://docs.timescale.com/use-timescale/latest/compression/)
-
-## ❓ FAQ
-
-**Q: Is TimescaleDB free?**  
-A: Yes, it's fully open-source PostgreSQL extension. Community edition is free, Cloud has paid tiers.
-
-**Q: How much storage for massive data?**  
-A: With compression, typically 50-100x reduction. Most datasets fit in 100GB range.
-
-**Q: Can I use this for real-time trading?**  
-A: Yes, but consider adding Redis for ultra-low latency lookups on active options.
-
-**Q: What about failover/HA?**  
-A: Set up PostgreSQL replication or use Timescale Cloud for managed HA.
-
-**Q: How do I backup?**  
-A: Use `pg_dump` or enable automated backups in Docker/Cloud.
 
 ## 📝 License
 

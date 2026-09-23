@@ -19,8 +19,14 @@ A complete setup for storing and analyzing options data from Massive.com using T
 ├── db_client.py               # Database connection & utilities
 ├── polygon_ingestion.py       # Fetch & ingest data from Massive API
 ├── advanced_analysis.py       # Analysis queries & patterns
+├── dashboard.py               # Plotly Dash UI with Gemini strategy recommendations
 └── requirements.txt           # Python dependencies
 ```
+
+## ✦ AI Strategy Recommendations (Gemini)
+
+`dashboard.py` (run it, then open http://localhost:8050) has an **Ask Gemini** button. It sends the selected ticker and expiry's option chain, with Greeks, IV, volume and open interest from TimescaleDB, to Gemini 2.5 Flash and shows the strategy it recommends.
+Set `GEMINI_API_KEY` in `.env` to enable it (see `.env.template`).
 
 ## ⚡ Quick Start (5 minutes)
 
